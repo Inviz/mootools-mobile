@@ -28,11 +28,27 @@ var condition = function(event){
 	return true;
 };
 
+
+var mouseup = function(e) {
+  var target = e.target;
+  while (target != this && (target = target.parentNode));
+  this.fireEvent(target ? 'touchend' : 'touchcancel', arguments);
+  document.removeEvent('mouseup', this.retrieve('touch:mouseup'));
+};
+
 Element.defineCustomEvent('touchstart', {
 
 	base: 'mousedown',
 
-	condition: condition
+	condition: function() {
+	  var bound = this.retrieve('touch:mouseup');
+	  if (!bound) {
+	    bound = mouseup.bind(this);
+	    this.store('touch:mouseup', bound);
+	  }
+	  document.addEvent('mouseup', bound);
+	  return condition.apply(this, arguments);
+	}
 
 }).defineCustomEvent('touchmove', {
 
@@ -40,12 +56,6 @@ Element.defineCustomEvent('touchstart', {
 
 	condition: condition
 
-}).defineCustomEvent('touchend', {
-
-	base: 'mouseup',
-
-	condition: condition
-
-});
+})
 
 })();
