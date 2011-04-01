@@ -29,10 +29,10 @@ var condition = function(event){
 };
 
 var mouseup = function(e) {
-  var target = e.target;
-  while (target != this && (target = target.parentNode));
-  this.fireEvent(target ? 'touchend' : 'touchcancel', arguments);
-  document.removeEvent('mouseup', this.retrieve('touch:mouseup'));
+  var target = e.target;
+  while (target != this && (target = target.parentNode));
+  this.fireEvent(target ? 'touchend' : 'touchcancel', arguments);
+  document.removeEvent('mouseup', this.retrieve('touch:mouseup'));
 };
 
 Element.defineCustomEvent('touchstart', {
@@ -40,13 +40,13 @@ Element.defineCustomEvent('touchstart', {
 	base: 'mousedown',
 
 	condition: function() {
-	  var bound = this.retrieve('touch:mouseup');
-	  if (!bound) {
-	    bound = mouseup.bind(this);
-	    this.store('touch:mouseup', bound);
-	  }
-	  document.addEvent('mouseup', bound);
-	  return condition.apply(this, arguments);
+	  var bound = this.retrieve('touch:mouseup');
+	  if (!bound) {
+	    bound = mouseup.bind(this);
+	    this.store('touch:mouseup', bound);
+	  }
+	  document.addEvent('mouseup', bound);
+	  return condition.apply(this, arguments);
 	}
 
 }).defineCustomEvent('touchmove', {
