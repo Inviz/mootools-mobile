@@ -19,13 +19,13 @@ provides: Mouse
 if (!Browser.Features.Touch) (function(){
 
 var condition = function(event){
-	event.targetTouches = [];
-	event.changedTouches = event.touches = [{
-		pageX: event.page.x, pageY: event.page.y,
-		clientX: event.client.x, clientY: event.client.y
-	}];
+  event.targetTouches = [];
+  event.changedTouches = event.touches = [{
+    pageX: event.page.x, pageY: event.page.y,
+    clientX: event.client.x, clientY: event.client.y
+  }];
 
-	return true;
+  return true;
 };
 
 var mouseup = function(e) {
@@ -37,23 +37,23 @@ var mouseup = function(e) {
 
 Element.defineCustomEvent('touchstart', {
 
-	base: 'mousedown',
+  base: 'mousedown',
 
-	condition: function() {
-	  var bound = this.retrieve('touch:mouseup');
-	  if (!bound) {
-	    bound = mouseup.bind(this);
-	    this.store('touch:mouseup', bound);
-	  }
-	  document.addEvent('mouseup', bound);
-	  return condition.apply(this, arguments);
-	}
+  condition: function() {
+    var bound = this.retrieve('touch:mouseup');
+    if (!bound) {
+      bound = mouseup.bind(this);
+      this.store('touch:mouseup', bound);
+    }
+    document.addEvent('mouseup', bound);
+    return condition.apply(this, arguments);
+  }
 
 }).defineCustomEvent('touchmove', {
 
-	base: 'mousemove',
+  base: 'mousemove',
 
-	condition: condition
+  condition: condition
 
 });
 
