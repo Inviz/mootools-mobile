@@ -16,35 +16,37 @@ provides: Browser.Features.Touch
 ...
 */
 
-Browser.Features.Touch = (function(){
-	try {
-		document.createEvent('TouchEvent').initTouchEvent('touchstart');
-		return true;
-	} catch (exception){}
-	
-	return false;
-})();
+if(!Browser.ie){
+  Browser.Features.Touch = (function(){
+  	try {
+  		document.createEvent('TouchEvent').initTouchEvent('touchstart');
+  		return true;
+  	} catch (exception){}
 
-// Chrome 5 thinks it is touchy!
-// Android doesn't have a touch delay and dispatchEvent does not fire the handler
-Browser.Features.iOSTouch = (function(){
-	var name = 'cantouch', // Name does not matter
-		html = document.html,
-		hasTouch = false;
+  	return false;
+  })();
 
-	var handler = function(){
-		html.removeEventListener(name, handler, true);
-		hasTouch = true;
-	};
+  // Chrome 5 thinks it is touchy!
+  // Android doesn't have a touch delay and dispatchEvent does not fire the handler
+  Browser.Features.iOSTouch = (function(){
+  	var name = 'cantouch', // Name does not matter
+  		html = document.html,
+  		hasTouch = false;
 
-	try {
-		html.addEventListener(name, handler, true);
-		var event = document.createEvent('TouchEvent');
-		event.initTouchEvent(name);
-		html.dispatchEvent(event);
-		return hasTouch;
-	} catch (exception){}
+  	var handler = function(){
+  		html.removeEventListener(name, handler, true);
+  		hasTouch = true;
+  	};
 
-	handler(); // Remove listener
-	return false;
-})();
+  	try {
+  		html.addEventListener(name, handler, true);
+  		var event = document.createEvent('TouchEvent');
+  		event.initTouchEvent(name);
+  		html.dispatchEvent(event);
+  		return hasTouch;
+  	} catch (exception){}
+
+  	handler(); // Remove listener
+  	return false;
+  })();
+};
